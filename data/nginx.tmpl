@@ -48,6 +48,10 @@ server {
     proxy_pass http://{{ $host }};
     proxy_http_version 1.1;
     include /etc/nginx/proxy_params;
+    {{ if (exists (printf "/etc/nginx/htpasswd/%s" $host)) }}
+      auth_basic  "Restricted {{ $host }}";
+      auth_basic_user_file  {{ (printf "/etc/nginx/htpasswd/%s" $host) }};
+    {{ end }}
   }
 }
 {{ end }}
